@@ -979,6 +979,50 @@
                 max-width: calc(100% - 40px);
             }
         }
+
+        /* Tab Navigation Styling */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(184, 125, 63, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-muted);
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .tab-btn:hover {
+            color: var(--brand-dark);
+        }
+
+        .tab-btn.active {
+            color: var(--brand-dark);
+            border-bottom-color: var(--brand-dark);
+        }
+
+        /* Terms and Conditions Block */
+        .terms-block {
+            background-color: var(--card-bg);
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 20px auto;
+            color: var(--text-main);
+        }
     </style>
 </head>
 
@@ -994,38 +1038,78 @@
             <p>Acessórios infantis feitos com afeto para deixar sua princesa ainda mais linda!</p>
         </div>
 
-        <div class="search-container">
-            <div class="search-wrapper">
-                <!-- Search Icon -->
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                <input type="text" id="search" class="search-input" placeholder="Buscar laço ou cor..."
-                    oninput="filterProducts()">
+        <!-- Tab Navigation -->
+        <nav class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('catalog')">Catálogo</button>
+            <button class="tab-btn" onclick="switchTab('terms')">Termos e Condições</button>
+        </nav>
+
+        <!-- Content that switches based on tab -->
+        <div id="catalog-content">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <!-- Search Icon -->
+                    <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input type="text" id="search" class="search-input" placeholder="Buscar laço ou cor..."
+                        oninput="filterProducts()">
+                </div>
+                <div class="categories-container" id="categories-list" style="display: none;"></div>
             </div>
-            <div class="categories-container" id="categories-list" style="display: none;"></div>
+            <div class="status-info" id="status-text">Carregando catálogo...</div>
         </div>
-        <div class="status-info" id="status-text">Carregando catálogo...</div>
     </header>
 
     <main class="container">
-        <div id="loading" class="loading-container">
-            <div class="spinner"></div>
-            Carregando laços incríveis...
+        <div id="catalog-view">
+            <div id="loading" class="loading-container">
+                <div class="spinner"></div>
+                Carregando laços incríveis...
+            </div>
+
+            <div id="error" class="error-container" style="display: none;">
+                Erro ao carregar o catálogo. Por favor, tente novamente mais tarde.
+            </div>
+
+            <div id="no-results" class="no-results" style="display: none;">
+                Nenhum produto encontrado com o termo buscado.
+            </div>
+
+            <div class="grid" id="catalog" style="display: none;">
+                <!-- Cards will be dynamically loaded here -->
+            </div>
         </div>
 
-        <div id="error" class="error-container" style="display: none;">
-            Erro ao carregar o catálogo. Por favor, tente novamente mais tarde.
-        </div>
+        <div id="terms-content" style="display: none;">
+            <div class="terms-block">
+                <h3>🚚 Frete e Entrega</h3>
+                <ul>
+                    <li><strong>Região de Cajamar/SP:</strong> Oferecemos a opção de entrega em mãos, com valor de frete
+                        a combinar.</li>
+                    <li><strong>Demais localidades:</strong> Enviamos para todo o Brasil via Correios. O valor é
+                        calculado com base no CEP de destino. Após a
+                        finalização do pedido via WhatsApp, apresentaremos as opções e valores disponíveis. O custo do
+                        frete é de responsabilidade do cliente.</li>
+                </ul>
 
-        <div id="no-results" class="no-results" style="display: none;">
-            Nenhum produto encontrado com o termo buscado.
-        </div>
+                <h3>🧵 Prazos de Confecção e Envio</h3>
+                <p>Nossos laços são artesanais e feitos com muito carinho. Trabalhamos com estoques limitados, atendendo
+                    com Produtos a pronta entrega: O envio é realizado em até 3 dias úteis após a
+                    confirmação do pagamento.
+                </p>
 
-        <div class="grid" id="catalog" style="display: none;">
-            <!-- Cards will be dynamically loaded here -->
+                <h3>💳 Formas de Pagamento</h3>
+                <p>Facilitamos o pagamento para sua comodidade:</p>
+                <ul>
+                    <li><strong>PIX:</strong> Chave informada durante o atendimento.</li>
+                    <li><strong>Cartão de Crédito:</strong> Via link de pagamento seguro.</li>
+                </ul>
+                <p><em>Todos os detalhes serão combinados diretamente pelo nosso WhatsApp durante a conclusão do seu
+                        pedido.</em></p>
+            </div>
         </div>
     </main>
 
@@ -1578,6 +1662,27 @@
 
             const url = `https://wa.me/${TELEFONE_VENDAS}?text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            const catalogContent = document.getElementById('catalog-content');
+            const catalogView = document.getElementById('catalog-view');
+            const termsContent = document.getElementById('terms-content');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+
+            if (tabName === 'catalog') {
+                catalogContent.style.display = 'block';
+                catalogView.style.display = 'block';
+                termsContent.style.display = 'none';
+            } else {
+                catalogContent.style.display = 'none';
+                catalogView.style.display = 'none';
+                termsContent.style.display = 'block';
+            }
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-btn[onclick="switchTab('${tabName}')"]`).classList.add('active');
         }
 
         // Notification Modal Logic
