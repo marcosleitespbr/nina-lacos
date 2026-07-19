@@ -265,6 +265,14 @@
             box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
         }
 
+        .btn-whatsapp.added-to-cart {
+            background-color: #28a745;
+            /* Success Green */
+            cursor: default;
+            pointer-events: none;
+            transform: translateY(0);
+        }
+
         .btn-whatsapp svg {
             width: 20px;
             height: 20px;
@@ -910,6 +918,29 @@
             }
         }
 
+        /* Customer Name Input Styling */
+        .customer-name-container {
+            margin-bottom: 20px;
+        }
+
+        #customer-name-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(224, 169, 109, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-main);
+        }
+
+        #customer-name-input:focus {
+            border-color: var(--brand-dark);
+            box-shadow: 0 0 8px rgba(184, 125, 63, 0.15);
+        }
+
         /* Notification Modal Specifics */
         #notification-overlay .cart-modal {
             max-width: 400px;
@@ -1030,6 +1061,12 @@
                 <!-- Items will be dynamically listed here -->
             </div>
             <div class="cart-modal-footer">
+                <!-- Campo de Nome -->
+                <div class="customer-name-container">
+                    <label for="customer-name-input" class="delivery-label">Seu Nome (obrigatório):</label>
+                    <input type="text" id="customer-name-input" placeholder="Digite seu nome completo">
+                </div>
+
                 <!-- Opções de Entrega -->
                 <div class="delivery-options">
                     <span class="delivery-label">Forma de Entrega:</span>
@@ -1282,7 +1319,7 @@
                                     <span class="price-label">Valor unitário:</span>
                                     <span class="price-value">${product.valorFormatado}</span>
                                 </div>
-                                <button onclick="adicionarAoCarrinho('${product.nome.replace(/'/g, "\\'")}', ${product.id}, ${product.valorRaw}, '${product.fotoUrl}')" class="btn-whatsapp" style="width: 100%; border: none; cursor: pointer; font-family: inherit;">
+                                <button onclick="adicionarAoCarrinho(this, '${product.nome.replace(/'/g, "\\'")}', ${product.id}, ${product.valorRaw}, '${product.fotoUrl}')" class="btn-whatsapp" style="width: 100%; border: none; cursor: pointer; font-family: inherit;">
                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                                     </svg>
@@ -1365,8 +1402,7 @@
             localStorage.setItem('nina_carrinho', JSON.stringify(carrinho));
             atualizarCarrinhoUI();
         }
-
-        function adicionarAoCarrinho(nome, id, valor, fotoUrl) {
+        function adicionarAoCarrinho(buttonElement, nome, id, valor, fotoUrl) {
             const selectedRadio = document.querySelector(`input[name="color-${id}"]:checked`);
             if (!selectedRadio) {
                 showNotificationModal("Atenção", "Por favor, selecione uma cor disponível para adicionar ao carrinho.");
@@ -1392,6 +1428,20 @@
             });
 
             salvarCarrinho();
+
+            // --- Animação de sucesso no botão ---
+            const originalContent = buttonElement.innerHTML;
+            buttonElement.classList.add('added-to-cart');
+            buttonElement.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Adicionado!
+            `;
+            setTimeout(() => {
+                buttonElement.innerHTML = originalContent;
+                buttonElement.classList.remove('added-to-cart');
+            }, 2000); // Reverte após 2 segundos
 
             // Provide visual feedback
             const cartBtn = document.getElementById('cart-btn');
@@ -1493,6 +1543,13 @@
                 return;
             }
 
+            const customerName = document.getElementById('customer-name-input').value.trim();
+            if (!customerName) {
+                showNotificationModal("Nome Necessário", "Por favor, preencha seu nome para continuar com o pedido.");
+                document.getElementById('customer-name-input').focus();
+                return;
+            }
+
             const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
             let deliveryText = "";
             if (deliveryType === 'correios') {
@@ -1507,7 +1564,7 @@
                 deliveryText = "Forma de Entrega: Retirar em mãos";
             }
 
-            let mensagem = "Olá! Gostaria de fazer o seguinte pedido:\n\n";
+            let mensagem = `Olá! Meu nome é ${customerName} e gostaria de fazer o seguinte pedido:\n\n`;
             let total = 0;
 
             carrinho.forEach(item => {
