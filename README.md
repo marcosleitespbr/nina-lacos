@@ -11,6 +11,17 @@ Este catálogo foi desenvolvido para facilitar a escolha de nossos produtos, per
 3. Ao finalizar, clique no ícone do carrinho e preencha seus dados de entrega.
 4. Clique em "Fazer Pedido Final" para ser redirecionado ao nosso WhatsApp e concluir sua compra.
 
+### Fluxo do Pedido
+```mermaid
+graph TD
+    A[Usuário acessa o site] --> B{Escolhe produtos}
+    B --> C[Adiciona ao carrinho]
+    C --> D[Abre Modal do Carrinho]
+    D --> E[Informa nome e tipo de entrega]
+    E --> F[Clica em Fazer Pedido Final]
+    F --> G[Redirecionamento para WhatsApp]
+    G --> H[Negociação Final]
+
 ## Funcionalidades
 - **Busca rápida:** Encontre laços por nome ou cor.
 - **Categorias:** Filtre por tipo de acessório.
