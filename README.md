@@ -12,6 +12,7 @@ Este catálogo foi desenvolvido para facilitar a escolha de nossos produtos, per
 4. Clique em "Fazer Pedido Final" para ser redirecionado ao nosso WhatsApp e concluir sua compra.
 
 ### Fluxo do Pedido
+
 ```mermaid
 graph TD
     A[Usuário acessa o site] --> B{Escolhe produtos}
