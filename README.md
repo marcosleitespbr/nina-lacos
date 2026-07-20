@@ -22,6 +22,7 @@ graph TD
     E --> F[Clica em Fazer Pedido Final]
     F --> G[Redirecionamento para WhatsApp]
     G --> H[Negociação Final]
+```
 
 ## Funcionalidades
 - **Busca rápida:** Encontre laços por nome ou cor.
