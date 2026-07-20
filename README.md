@@ -15,13 +15,13 @@ Este catálogo foi desenvolvido para facilitar a escolha de nossos produtos, per
 
 ```mermaid
 graph TD
-    A[Usuário acessa o site] --> B{Escolhe produtos}
-    B --> C[Adiciona ao carrinho]
-    C --> D[Abre Modal do Carrinho]
-    D --> E[Informa nome e tipo de entrega]
-    E --> F[Clica em Fazer Pedido Final]
-    F --> G[Redirecionamento para WhatsApp]
-    G --> H[Negociação Final]
+A[Usuário acessa o site] --> B{Escolhe produtos}
+B --> C[Adiciona ao carrinho]
+C --> D[Abre Modal do Carrinho]
+D --> E[Informa nome e tipo de entrega]
+E --> F[Clica em Fazer Pedido Final]
+F --> G[Redirecionamento para WhatsApp]
+G --> H[Negociação Final]
 ```
 
 ## Funcionalidades
